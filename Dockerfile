@@ -8,5 +8,5 @@ RUN npm install --production --silent
 
 COPY . .
 
-EXPOSE 30006
+EXPOSE 30007
 CMD [ "node", "src/server.js" ]

@@ -2,7 +2,7 @@
 tag=0
 REPO=orky161
 ORGANIZATION=library
-PROJECT=authors
+PROJECT=messenger
 IMAGE=${REPO}/${ORGANIZATION}-${PROJECT}:${tag}
 
 build:
