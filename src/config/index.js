@@ -1,7 +1,5 @@
-const mysql = require('mysql2');
 const amqp = require('amqplib/callback_api');
 const {startPublisher} = require("../queue/rabbit/producers");
-const {channelConsume} = require("../queue/rabbit/consumers");
 const LibraryAuth = require("library.io-libs/dist/authorization")
 const cassandra = require('cassandra-driver');
 
@@ -27,29 +25,13 @@ function createRabbitConnection (){
             return setTimeout(createRabbitConnection, 1500 + (Math.random() * 3000));
         });
         console.log("[AMQP] connected");
-        await channelConsume(conn)
         await startPublisher(conn)
     });
 }
 
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    multipleStatements: true
-});
-
-const promisePool = pool.promise();
-
 const libraryAuth = new LibraryAuth(process.env.TOKEN_PRIVATE_KEY)
 
 module.exports = {
-    pool: promisePool,
     createRabbitConnection,
     libraryAuth,
     cassandraClient

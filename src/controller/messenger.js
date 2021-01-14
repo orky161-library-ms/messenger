@@ -1,5 +1,5 @@
 const MessengerDal = require('../dal/messenger')
-
+const {sendChatMessage} = require("../queue/rabbit/producers/publish");
 
 async function getRoomChatByMembers({member1, member2}) {
     const mem1 = Math.min(member1, member2);
@@ -10,12 +10,15 @@ async function getRoomChatByMembers({member1, member2}) {
     return room
 }
 
-async function sendMessage({roomId, transmitter, message}) {
+async function sendMessage({transmitter, receiver, message}) {
+    const roomId = await getRoomChatByMembers({member1: transmitter, member2: receiver})
     await MessengerDal.sendMessage(roomId ,transmitter, message)
+    sendChatMessage(receiver, message)
 }
 
-async function getMessagesByRoom(room) {
-    return MessengerDal.getMessagesByRoom(room)
+async function getMessagesByRoom({member1, member2}) {
+    const roomId = await getRoomChatByMembers({member1, member2})
+    return MessengerDal.getMessagesByRoom(roomId)
 }
 
 module.exports = {

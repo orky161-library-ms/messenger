@@ -1,5 +1,5 @@
 
-const checkConnectionQuery = "DO 1"
+const checkConnectionQuery = "SELECT now() FROM system.local"
 
 
 const getRoomChatByMembers = `SELECT id FROM rooms_by_members WHERE member1 = ? AND member2 = ?`;

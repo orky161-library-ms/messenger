@@ -20,7 +20,6 @@ async function sendMessage(roomId ,transmitter, message) {
 
 async function getMessagesByRoom(room) {
     const messages = await cassandraClient.execute(messagesQuery.getMessagesByRoomChat, [room], { prepare : true })
-    console.log(messages)
     return messages.rows
 }
 

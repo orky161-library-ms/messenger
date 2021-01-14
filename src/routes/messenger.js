@@ -7,17 +7,17 @@ const {verifyPermission, decodeToken, equalField} = libraryAuth
 
 const router = express.Router()
 
-router.get("/room/:id/member/:member", (async (req, res) => {
+router.get("/:id/member/:member", [decodeToken, equalField("id")], (async (req, res) => {
     const room = await MessengerLogic.getRoomChatByMembers({member1: req.params.id, member2: req.params.member})
     res.status(200).json({room})
 }))
 
-router.get("/room/:room/messages",(async (req, res) => {
-    const messages = await MessengerLogic.getMessagesByRoom(req.params.room)
+router.get("/:id/member/:member/messages", [decodeToken, equalField("id")], (async (req, res) => {
+    const messages = await MessengerLogic.getMessagesByRoom({member1: req.params.id, member2: req.params.member})
     res.status(200).json({messages})
 }))
 
-router.post("/message/:id",(async (req, res) => {
+router.post("/:id/message", [decodeToken, equalField("id")], (async (req, res) => {
     await MessengerLogic.sendMessage({...req.body, transmitter: req.params.id})
     res.status(202).json({message: "success"})
 }))
