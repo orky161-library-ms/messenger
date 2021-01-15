@@ -18,9 +18,9 @@ async function sendMessage(roomId ,transmitter, message) {
     await cassandraClient.execute(messagesQuery.createMessage, [roomId ,transmitter, message], { prepare : true })
 }
 
-async function getMessagesByRoom(room) {
-    const messages = await cassandraClient.execute(messagesQuery.getMessagesByRoomChat, [room], { prepare : true })
-    return messages.rows
+async function getMessagesByRoom(room, size = 3, pageState) {
+    const messages = await cassandraClient.execute(messagesQuery.getMessagesByRoomChat, [room], {pageState: pageState, prepare : true, fetchSize: size })
+    return {pageState: messages.pageState, messages: messages.rows}
 }
 
 function checkConnection() {

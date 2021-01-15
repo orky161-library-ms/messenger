@@ -16,9 +16,9 @@ async function sendMessage({transmitter, receiver, message}) {
     sendChatMessage(receiver, message)
 }
 
-async function getMessagesByRoom({member1, member2}) {
+async function getMessagesByRoom({member1, member2, size, pageState}) {
     const roomId = await getRoomChatByMembers({member1, member2})
-    return MessengerDal.getMessagesByRoom(roomId)
+    return MessengerDal.getMessagesByRoom(roomId, size, pageState)
 }
 
 module.exports = {

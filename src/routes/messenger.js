@@ -12,12 +12,12 @@ router.get("/:id/member/:member", [decodeToken, equalField("id")], (async (req, 
     res.status(200).json({room})
 }))
 
-router.get("/:id/member/:member/messages", [decodeToken, equalField("id")], (async (req, res) => {
-    const messages = await MessengerLogic.getMessagesByRoom({member1: req.params.id, member2: req.params.member})
+router.get("/:id/member/:member/messages", (async (req, res) => {
+    const messages = await MessengerLogic.getMessagesByRoom({member1: req.params.id, member2: req.params.member, size: req.query.size, pageState: req.query.pageState,})
     res.status(200).json({messages})
 }))
 
-router.post("/:id/message", [decodeToken, equalField("id")], (async (req, res) => {
+router.post("/:id/message", (async (req, res) => {
     await MessengerLogic.sendMessage({...req.body, transmitter: req.params.id})
     res.status(202).json({message: "success"})
 }))
