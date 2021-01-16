@@ -4,9 +4,9 @@ const LibraryAuth = require("library.io-libs/dist/authorization")
 const cassandra = require('cassandra-driver');
 
 const cassandraClient = new cassandra.Client({
-    keyspace: 'test_keyspace',
-    localDataCenter: "datacenter1",
-    contactPoints:["localhost:9042"]
+    keyspace: process.env.KEYSPACE,
+    localDataCenter: process.env.LOCALDATACENTER,
+    contactPoints:[process.env.CONTACTPOINTS]
 });
 
 function createRabbitConnection (){
